@@ -1,0 +1,13 @@
+<div (*ngIf)="movies.length > 0">
+  <ul class="list-of-movies">
+    <li *ngFor="let movie of movies | paginate: {   itemsPerPage: 20,
+                                                      currentPage: page,
+                                                      totalItems: total }">
+     <img src="{{'https://image.tmdb.org/t/p' + movie.backdrop_path }}">
+      {{ movie.title }}
+    </li>
+  </ul>
+  <div class="has-text-centered">
+    <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+  </div>
+</div>
