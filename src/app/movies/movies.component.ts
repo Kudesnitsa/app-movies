@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {MoviesService} from './movies.service';
-import {Movie} from './movie';
+import {MoviesService} from '../services/movies.service';
+import {Movie} from '../movie/movie';
+import {environment as env} from '../../environments/environment';
 
 @Component({
   selector: 'app-movies',
@@ -9,30 +10,39 @@ import {Movie} from './movie';
 })
 export class MoviesComponent implements OnInit {
   movies: Movie[];
+  allMovies: {};
   page: number;
   total: number;
   loading: boolean;
   url: string;
+  urlImage: string;
+  defaultImage: string;
   private moviesService: MoviesService;
 
   constructor(moviesService: MoviesService) {
+    this.url = env.moviesUrl + '/popular';
+    this.urlImage = env.moviesImageUrl;
     this.moviesService = moviesService;
+    this.defaultImage = env.defaultImage;
     this.page = 1;
     this.total = 0;
     this.loading = false;
     this.movies = [];
-    this.getPage(this.page);
+    this.allMovies = {};
+    this.getDataPerPage(this.page);
   }
 
-  getPage(page: number) {
-    this.url = 'https://api.themoviedb.org/3/movie/popular';
+  getDataPerPage(page: number): void {
     this.page = page;
     this.loading = true;
+    if (this.allMovies[page]) {
+      this.movies = this.allMovies[page];
+    }
 
     this.moviesService.get<{ total_results: number, results: Movie[] }>({
       url: this.url,
       params: {
-        'api_key': '1a3eed084484cf7107b59023492ee813',
+        'api_key': env.apiKey,
         'page': page
       }
     }).then(
@@ -40,6 +50,7 @@ export class MoviesComponent implements OnInit {
         this.total = response.total_results;
         this.loading = false;
         this.movies = response.results;
+        this.allMovies[page] = response.results;
         console.log(response.results);
       }
     ).catch(

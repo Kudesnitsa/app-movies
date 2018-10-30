@@ -2,12 +2,13 @@
   <ul class="list-of-movies">
     <li *ngFor="let movie of movies | paginate: {   itemsPerPage: 20,
                                                       currentPage: page,
-                                                      totalItems: total }">
-     <img src="{{'https://image.tmdb.org/t/p' + movie.backdrop_path }}">
-      {{ movie.title }}
+                                                      totalItems: total }"
+        routerLink="/movie/{{movie.id}}">
+      <img src="{{movie.backdrop_path ? (urlImage + movie.backdrop_path): defaultImage}}">
+      <div class="name-movie"> {{ movie.title }}<span *ngIf="movie.adult">18+</span></div>
     </li>
   </ul>
   <div class="has-text-centered">
-    <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+    <pagination-controls (pageChange)="getDataPerPage($event)"></pagination-controls>
   </div>
 </div>

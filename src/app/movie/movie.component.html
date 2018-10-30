@@ -1,0 +1,14 @@
+<div class="movie">
+  <h1> {{movie.title}}
+    <span *ngIf="movie.adult">18+</span>
+  </h1>
+  <img src="{{movie.backdrop_path ? (urlImage + movie.backdrop_path): defaultImage}}">
+  <div>{{movie.overview}}</div>
+  <div><span>budget:</span>{{movie.budget}}</div>
+  <div><span>release date:</span>{{movie.release_date}}</div>
+  <div><span>Duration:</span>{{movie.runtime}}min.</div>
+  <div><span>Production companies:</span><span *ngFor="let companie of movie.production_companies">{{companie.name+' | '}}</span>
+  </div>
+  <div><span>Production countries:</span><span *ngFor="let countrie of movie.production_countries">{{countrie.name+' | '}}</span>
+  </div>
+</div>
